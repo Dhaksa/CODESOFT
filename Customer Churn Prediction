@@ -1,0 +1,109 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from pandas import DataFrame
+import sklearn as sk
+from sklearn import preprocessing
+from google.colab import drive
+drive.mount('/content/drive')
+cd /content/drive/My Drive/Codesoft
+data=pd.read_csv("Churn_Modelling.csv")
+data.shape
+data.info()
+import missingno as msno
+data.isnull().sum()
+data.dtypes
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+label_encoder = LabelEncoder()
+data['Surname'] = label_encoder.fit_transform(data['Surname'])
+data['Geography'] = label_encoder.fit_transform(data['Geography'])
+data['Gender'] = label_encoder.fit_transform(data['Gender'])
+
+
+#Logistic Regression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+X = data.drop(columns=['Exited'])
+y = data['Exited']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+logreg = LogisticRegression()
+logreg.fit(X_train_scaled, y_train)
+
+y_pred = logreg.predict(X_test_scaled)
+
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy}')
+
+report = classification_report(y_test, y_pred)
+print(f'Classification Report:\n{report}')
+
+# Random Forest
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+X = data.drop(columns=['Exited'])
+y = data['Exited']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+from sklearn.ensemble import RandomForestClassifier
+clf=RandomForestClassifier(n_estimators=100)
+clf.fit(X_train,y_train)
+Y_pred=clf.predict(X_test)
+
+from sklearn.metrics import confusion_matrix,accuracy_score,precision_score
+cm = confusion_matrix(y_test, Y_pred)
+ac = accuracy_score(y_test,Y_pred)
+from sklearn import metrics
+pc= precision_score(y_test,Y_pred,average='weighted')
+recall = metrics.recall_score(y_test, Y_pred, average='weighted')
+f1 = metrics.f1_score(y_test, Y_pred, average='weighted')
+print('accuracy:',ac)
+print('precision:',pc)
+print('recall:',recall)
+print('f1 score:',f1)
+
+# Gradient Boosting
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+X = data.drop(columns=['Exited'])
+y = data['Exited']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+from sklearn.ensemble import GradientBoostingClassifier
+clf=GradientBoostingClassifier(n_estimators=100)
+clf.fit(X_train,y_train)
+Y_pred=clf.predict(X_test)
+from sklearn.metrics import confusion_matrix,accuracy_score,precision_score
+cm = confusion_matrix(y_test, Y_pred)
+ac = accuracy_score(y_test,Y_pred)
+from sklearn import metrics
+pc= precision_score(y_test,Y_pred,average='weighted')
+recall = metrics.recall_score(y_test, Y_pred, average='weighted')
+f1 = metrics.f1_score(y_test, Y_pred, average='weighted')
+print('accuracy:',ac)
+print('precision:',pc)
+print('recall:',recall)
+print('f1 score:',f1)
