@@ -1,0 +1,82 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from pandas import DataFrame
+import sklearn as sk
+from sklearn import preprocessing
+from google.colab import drive
+drive.mount('/content/drive')
+cd /content/drive/My Drive/Codesoft
+data=pd.read_csv("fraudTrain.csv")
+data_set=pd.read_csv("fraudTest.csv")
+data.shape
+data_set.shape
+import pandas as pd
+data['trans_date_trans_time'] = pd.to_datetime(data['trans_date_trans_time'])
+data['year'] = data['trans_date_trans_time'].dt.year
+data['month'] = data['trans_date_trans_time'].dt.month
+data['day'] = data['trans_date_trans_time'].dt.day
+data['hour'] = data['trans_date_trans_time'].dt.hour
+data['minute'] = data['trans_date_trans_time'].dt.minute
+data['second'] = data['trans_date_trans_time'].dt.second
+data.drop(columns=['trans_date_trans_time'], inplace=True)
+print(data.head())
+data_set['trans_date_trans_time'] = pd.to_datetime(data_set['trans_date_trans_time'])
+data_set['year'] = data_set['trans_date_trans_time'].dt.year
+data_set['month'] = data_set['trans_date_trans_time'].dt.month
+data_set['day'] = data_set['trans_date_trans_time'].dt.day
+data_set['hour'] = data_set['trans_date_trans_time'].dt.hour
+data_set['minute'] = data_set['trans_date_trans_time'].dt.minute
+data_set['second'] = data_set['trans_date_trans_time'].dt.second
+data_set.drop(columns=['trans_date_trans_time'], inplace=True)
+print(data_set.head())
+Q1 = data_set.quantile(0.25)
+Q3 = data_set.quantile(0.75)
+IQR = Q3 - Q1
+data_set = data_set[~((data_set.select_dtypes(include=['number']) < (Q1 - 1.5 * IQR)) | (data_set.select_dtypes(include=['number']) > (Q3 + 1.5 * IQR))).any(axis=1)]
+import missingno as msno
+data_set.isnull().sum()
+import missingno as msno
+data.isnull().sum()
+
+# Decision tree classifier
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+X_train = X_train.apply(le.fit_transform)
+X_test = X_test.apply(le.fit_transform)
+Y_train = le.fit_transform(Y_train)
+from sklearn.tree import DecisionTreeClassifier
+decision = DecisionTreeClassifier(criterion='gini',random_state = 0,max_depth=3,max_features=4)
+model  = decision.fit(X_train,Y_train)
+Y_pred = decision.predict(X_test)
+from sklearn.metrics import confusion_matrix,accuracy_score,precision_score
+cm = confusion_matrix(Y_test, Y_pred)
+ac = accuracy_score(Y_test,Y_pred)
+from sklearn import metrics
+pc= precision_score(Y_test,Y_pred,average='weighted')
+recall = metrics.recall_score(Y_test, Y_pred, average='weighted')
+f1 = metrics.f1_score(Y_test, Y_pred, average='weighted')
+print('accuracy:',ac)
+print('precision:',pc)
+print('recall:',recall)
+print('f1 score:',f1)
+
+# Random Forest classifier
+from sklearn.ensemble import RandomForestClassifier
+clf=RandomForestClassifier(n_estimators=100)
+clf.fit(X_train,Y_train)
+Y_pred=clf.predict(X_test)
+
+from sklearn.metrics import confusion_matrix,accuracy_score,precision_score
+cm = confusion_matrix(Y_test, Y_pred)
+ac = accuracy_score(Y_test,Y_pred)
+from sklearn import metrics
+pc= precision_score(Y_test,Y_pred)
+recall = metrics.recall_score(Y_test, Y_pred)
+f1 = metrics.f1_score(Y_test, Y_pred)
+print('accuracy:',ac)
+print('precision:',pc)
+print('recall:',recall)
+print('f1 score:',f1)
