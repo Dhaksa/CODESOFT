@@ -1,0 +1,34 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+from google.colab import drive
+drive.mount('/content/drive')
+cd /content/drive/My Drive/Codesoft
+data=pd.read_csv("spam.csv", encoding='latin-1')
+data.head()
+data['v2'] = data['v2'].str.lower()
+X = data['v2']
+y = data['v1']
+# TF-IDF Vectorization
+tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+X_tfidf = tfidf_vectorizer.fit_transform(X)
+X_train, X_test, y_train, y_test = train_test_split(X_tfidf, y, test_size=0.2, random_state=42)
+
+# Naive Bayes classifier
+naive_bayes = MultinomialNB()
+naive_bayes.fit(X_train, y_train)
+y_pred = naive_bayes.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+# Logistic Regression
+rom sklearn.linear_model import LogisticRegression
+logistic_reg_model = LogisticRegression()
+logistic_reg_model.fit(X_train, y_train)
+y_pred = logistic_reg_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
